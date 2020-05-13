@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/weather_bloc.dart';
 import 'common/city_input_field.dart';
+import 'model/weather.dart';
 
 void main() {
   runApp(MyApp());
@@ -47,28 +48,60 @@ class _WeatherPageStateState extends State<WeatherPageState> {
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 16),
           alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'City Name',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Text(
-                '35 °C,',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              CityInputField(),
-            ],
+          child: BlocBuilder(
+            bloc: weatherBloc,
+            builder: (context, state) {
+              if (state is InitialWeatherState)
+                return buildInitialInput();
+              else if (state is WeatherLoadingState)
+                return buildLoading();
+              else if (state is WeatherLoadedState)
+                return buildColumnWithData(state.weather);
+              else
+                return buildLoading();
+            },
           ),
         ),
       ),
+    );
+  }
+
+  Column buildColumnWithData(Weather weather) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Text(
+          weather.cityName,
+          style: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        Text(
+          // Display the temperature with 1 decimal place
+           "${weather.temp.toStringAsFixed(1)} °C",
+          style: TextStyle(fontSize: 80),
+        ),
+        CityInputField(),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    weatherBloc.dispose();
+  }
+
+  Widget buildInitialInput() {
+    return Center(
+      child: CityInputField(),
+    );
+  }
+
+  Widget buildLoading() {
+    return Center(
+      child: CircularProgressIndicator(),
     );
   }
 }

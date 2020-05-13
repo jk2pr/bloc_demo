@@ -8,17 +8,22 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherState get initialState => InitialWeatherState();
 
   @override
-  Stream<WeatherState> mapEventToState(WeatherEvent event,) async* {
+  Stream<WeatherState> mapEventToState(
+    WeatherEvent event,
+  ) async* {
     if (event is GetWeather) {
       yield WeatherLoadingState();
       final weather = await _fetchWeatherFromFakeApi(event.cityName);
+      print(weather.cityName);
       yield WeatherLoadedState(weather);
     }
   }
 }
 
-_fetchWeatherFromFakeApi(String cityName) {
-  Future.delayed(Duration(seconds: 1), () {
-    return Weather(20,'Gorakhpur');
+Future<Weather> _fetchWeatherFromFakeApi(String cityName) {
+  return Future.delayed(Duration(milliseconds: 10000), () {
+    var weather = Weather(20, 'Gorakhpur');
+
+    return weather;
   });
 }
