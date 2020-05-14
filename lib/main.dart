@@ -43,23 +43,29 @@ class _WeatherPageStateState extends State<WeatherPageState> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: BlocProvider(
+      body: BlocListener(
         bloc: weatherBloc,
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 16),
-          alignment: Alignment.center,
-          child: BlocBuilder(
-            bloc: weatherBloc,
-            builder: (context, state) {
-              if (state is InitialWeatherState)
-                return buildInitialInput();
-              else if (state is WeatherLoadingState)
-                return buildLoading();
-              else if (state is WeatherLoadedState)
-                return buildColumnWithData(state.weather);
-              else
-                return buildLoading();
-            },
+        listener: (context, state) {
+
+        },
+        child: BlocProvider(
+          bloc: weatherBloc,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            alignment: Alignment.center,
+            child: BlocBuilder(
+              bloc: weatherBloc,
+              builder: (context, state) {
+                if (state is InitialWeatherState)
+                  return buildInitialInput();
+                else if (state is WeatherLoadingState)
+                  return buildLoading();
+                else if (state is WeatherLoadedState)
+                  return buildColumnWithData(state.weather);
+                else
+                  return buildLoading();
+              },
+            ),
           ),
         ),
       ),
@@ -79,7 +85,7 @@ class _WeatherPageStateState extends State<WeatherPageState> {
         ),
         Text(
           // Display the temperature with 1 decimal place
-           "${weather.temp.toStringAsFixed(1)} °C",
+          "${weather.temp.toStringAsFixed(1)} °C",
           style: TextStyle(fontSize: 80),
         ),
         CityInputField(),
