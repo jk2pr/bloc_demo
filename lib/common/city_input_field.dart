@@ -1,6 +1,6 @@
-
 import 'package:blocdemo/bloc/weather_bloc.dart';
 import 'package:blocdemo/bloc/weather_event.dart';
+import 'package:blocdemo/localization/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +23,8 @@ class _CityInputFieldState extends State<CityInputField> {
         onSubmitted: submitCityName,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
-          hintText: "Enter a city",
+          hintText: AppLocalizations.of(context).translate('enter_a_city'),
+          //"Enter a city",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           suffixIcon: Icon(Icons.search),
         ),
