@@ -5,6 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/weather_bloc.dart';
 import 'common/city_input_field.dart';
 import 'model/weather.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'localization/app_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,6 +23,21 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      // List all of the app's supported locales here
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('hi', 'IN'),
+      ],
+      // These delegates make sure that the localization data for the proper language is loaded
+      localizationsDelegates: [
+        // THIS CLASS WILL BE ADDED LATER
+        // A class which loads the translations from JSON files
+        AppLocalizations.delegate,
+        // Built-in localization of basic text for Material widgets
+        GlobalMaterialLocalizations.delegate,
+        // Built-in localization for text direction LTR/RTL
+        GlobalWidgetsLocalizations.delegate,
+      ],
       home: WeatherPageState(title: 'Flutter Demo Home Page'),
     );
   }
