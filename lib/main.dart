@@ -1,13 +1,13 @@
 import 'package:blocdemo/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:intl/intl.dart';
 import 'bloc/weather_bloc.dart';
 import 'common/city_input_field.dart';
+import 'generated/l10n.dart';
 import 'model/weather.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'localization/app_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,20 +24,20 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // List all of the app's supported locales here
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('hi', 'IN'),
-      ],
+      supportedLocales: S.delegate.supportedLocales,
       // These delegates make sure that the localization data for the proper language is loaded
       localizationsDelegates: [
         // THIS CLASS WILL BE ADDED LATER
-        // A class which loads the translations from JSON files
-        AppLocalizations.delegate,
+
+
+        // A class which loads the translations from ARB files
+        S.delegate,
         // Built-in localization of basic text for Material widgets
         GlobalMaterialLocalizations.delegate,
         // Built-in localization for text direction LTR/RTL
         GlobalWidgetsLocalizations.delegate,
       ],
+
       home: WeatherPageState(title: 'Flutter Demo Home Page'),
     );
   }
@@ -84,6 +84,12 @@ class _WeatherPageStateState extends State<WeatherPageState> {
     );
   }
 
+  format(){
+    var now = new DateTime.now();
+    var formatter = new DateFormat.yMMMMd(Intl.getCurrentLocale());
+    String formatted = formatter.format(now);
+    return formatted;
+  }
   Column buildColumnWithData(Weather weather) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -98,6 +104,11 @@ class _WeatherPageStateState extends State<WeatherPageState> {
         Text(
           // Display the temperature with 1 decimal place
            "${weather.temp.toStringAsFixed(1)} °C",
+          style: TextStyle(fontSize: 80),
+        ),
+        Text(
+          // Display the temperature with 1 decimal place
+           format(),
           style: TextStyle(fontSize: 80),
         ),
         CityInputField(),
